@@ -7,16 +7,22 @@ namespace Paskaita14.BusinessLogic
     {
         public ShoppingList Map(CreateShoppingListDTO shoppingListDTO, int userId)
         {
-            return new ShoppingList
+            var shoppingListItemsEntities = shoppingListDTO.Items.Select((x, i) => new ShoppingListItem
+            {
+                Title = x.Title,
+                Quantity = x.Quantity,
+                Order = i + 1
+            }).ToList();
+
+            var shoppingListEntity = new ShoppingList
             {
                 Title = shoppingListDTO.Title,
                 UserId = userId,
-                Items = shoppingListDTO.Items.Select(x => new ShoppingListItem
-                {
-                    Title = x.Title,
-                    Quantity = x.Quantity
-                }).ToList()
+                Description = shoppingListDTO.Description,
+                Items = shoppingListItemsEntities
             };
+
+            return shoppingListEntity;
         }
     }
 }
